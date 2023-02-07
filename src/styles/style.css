@@ -1,5 +1,5 @@
 .container {
-  max-width: 1200px;
+  max-width: 768px;
   margin: 0 auto;
   width: 90%;
   background: #17181F;
@@ -26,6 +26,15 @@
   border-radius: 15px;
 }
 
+.header {
+  display: none;
+}
+
+.sidebar {
+  display: none;
+}
+
+
 @media screen and (min-width: 768px) {
   .modal-wrapper .modal {
     top: 15%;
@@ -36,7 +45,19 @@
 @media screen and (min-width: 1024px) {
   .modal-wrapper .modal {
     top: 15%;
-    width: 30%;
+    width: 20%;
+  }
+  .header {
+    display: block;
+    background: #111116;
+    padding: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.3);
+  }
+  .sidebar {
+    display: block;
+  }
+  .footer {
+    display: none;
   }
 } 
   

@@ -36,6 +36,7 @@ import { BsSearch } from "react-icons/bs"
 import { AiOutlineBell } from "react-icons/ai"
 import "../styles/style.css"
 import ModalInput from "../components/ModalInput"
+import HeaderApp from "../components/HeaderApp"
 import { Link } from "react-router-dom"
 
 const { Header, Sider, Content, Footer } = Layout
@@ -138,6 +139,8 @@ function Home() {
         </Row>
       </ModalInput>
 
+      <HeaderApp />
+
       <Layout style={{ background: "#17181F" }}>
         <div className="container">
           <Content style={{ background: "#17181F", paddingTop: "3rem" }}>
@@ -215,115 +218,121 @@ function Home() {
                 </Link>
               </Col>
               <Col span={12}>
-                <Card style={{ background: "#20212C", border: "none" }}>
-                  <Avatar
-                    shape="square"
-                    icon={
-                      <BsFillPersonFill
-                        size={30}
-                        style={{
-                          color: "#fff",
-                          padding: "0.3rem",
-                          lineHeight: "0",
-                        }}
-                      />
-                    }
-                    style={{ background: "#6DC5BE", marginBottom: "2rem" }}
-                  />
-
-                  <Typography.Title level={4} style={{ color: "#fff" }}>
-                    Personal
-                  </Typography.Title>
-                  <Row
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography.Text style={{ color: "#5A5B64" }}>
-                      3/5 done
-                    </Typography.Text>
-                    <VscLoading
-                      size={20}
-                      style={{ color: "#6DC5BE", transform: "scaleX(-1)" }}
+                <Link to="/todos/2">
+                  <Card style={{ background: "#20212C", border: "none" }}>
+                    <Avatar
+                      shape="square"
+                      icon={
+                        <BsFillPersonFill
+                          size={30}
+                          style={{
+                            color: "#fff",
+                            padding: "0.3rem",
+                            lineHeight: "0",
+                          }}
+                        />
+                      }
+                      style={{ background: "#6DC5BE", marginBottom: "2rem" }}
                     />
-                  </Row>
-                </Card>
+
+                    <Typography.Title level={4} style={{ color: "#fff" }}>
+                      Personal
+                    </Typography.Title>
+                    <Row
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography.Text style={{ color: "#5A5B64" }}>
+                        3/5 done
+                      </Typography.Text>
+                      <VscLoading
+                        size={20}
+                        style={{ color: "#6DC5BE", transform: "scaleX(-1)" }}
+                      />
+                    </Row>
+                  </Card>
+                </Link>
               </Col>
               <Col span={12} style={{ marginTop: "1rem" }}>
-                <Card style={{ background: "#20212C", border: "none" }}>
-                  <Avatar
-                    shape="square"
-                    icon={
-                      <BsFillBrushFill
-                        size={30}
-                        style={{
-                          color: "#fff",
-                          padding: "0.5rem",
-                          lineHeight: "0",
-                        }}
-                      />
-                    }
-                    style={{ background: "#AE70DE", marginBottom: "2rem" }}
-                  />
-
-                  <Typography.Title level={4} style={{ color: "#fff" }}>
-                    Design
-                  </Typography.Title>
-                  <Row
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography.Text style={{ color: "#5A5B64" }}>
-                      All 15 done
-                    </Typography.Text>
-                    <BsFillCheckCircleFill
-                      size={20}
-                      style={{ color: "#AE70DE" }}
+                <Link to="/todos/3">
+                  <Card style={{ background: "#20212C", border: "none" }}>
+                    <Avatar
+                      shape="square"
+                      icon={
+                        <BsFillBrushFill
+                          size={30}
+                          style={{
+                            color: "#fff",
+                            padding: "0.5rem",
+                            lineHeight: "0",
+                          }}
+                        />
+                      }
+                      style={{ background: "#AE70DE", marginBottom: "2rem" }}
                     />
-                  </Row>
-                </Card>
+
+                    <Typography.Title level={4} style={{ color: "#fff" }}>
+                      Design
+                    </Typography.Title>
+                    <Row
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography.Text style={{ color: "#5A5B64" }}>
+                        All 15 done
+                      </Typography.Text>
+                      <BsFillCheckCircleFill
+                        size={20}
+                        style={{ color: "#AE70DE" }}
+                      />
+                    </Row>
+                  </Card>
+                </Link>
               </Col>
               <Col span={12} style={{ marginTop: "1rem" }}>
-                <Card style={{ background: "#20212C", border: "none" }}>
-                  <Avatar
-                    shape="square"
-                    icon={
-                      <BsFillCartFill
-                        size={30}
-                        style={{
-                          color: "#fff",
-                          padding: "0.5rem",
-                          lineHeight: "0",
-                        }}
-                      />
-                    }
-                    style={{ background: "#D0B555", marginBottom: "2rem" }}
-                  />
-
-                  <Typography.Title level={4} style={{ color: "#fff" }}>
-                    Groceries
-                  </Typography.Title>
-                  <Row
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography.Text style={{ color: "#5A5B64" }}>
-                      2/10 done
-                    </Typography.Text>
-                    <VscLoading
-                      size={20}
-                      style={{ color: "#D0B555", transform: "scaleY(-1)" }}
+                <Link to="/todos/4">
+                  <Card style={{ background: "#20212C", border: "none" }}>
+                    <Avatar
+                      shape="square"
+                      icon={
+                        <BsFillCartFill
+                          size={30}
+                          style={{
+                            color: "#fff",
+                            padding: "0.5rem",
+                            lineHeight: "0",
+                          }}
+                        />
+                      }
+                      style={{ background: "#D0B555", marginBottom: "2rem" }}
                     />
-                  </Row>
-                </Card>
+
+                    <Typography.Title level={4} style={{ color: "#fff" }}>
+                      Groceries
+                    </Typography.Title>
+                    <Row
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography.Text style={{ color: "#5A5B64" }}>
+                        2/10 done
+                      </Typography.Text>
+                      <VscLoading
+                        size={20}
+                        style={{ color: "#D0B555", transform: "scaleY(-1)" }}
+                      />
+                    </Row>
+                  </Card>
+                </Link>
               </Col>
 
               <Col span={12} style={{ marginTop: "1rem" }}>
@@ -342,54 +351,56 @@ function Home() {
           </Content>
         </div>
 
-        <Footer
-          style={{
-            position: "fixed",
-            bottom: "0",
-            background: "#17181F",
-            width: "100%",
-          }}
-        >
-          <Space
+        <div className="footer">
+          <Footer
             style={{
+              position: "fixed",
+              bottom: "0",
+              background: "#17181F",
               width: "100%",
-              justifyContent: "space-between",
-              alignItems: "center",
             }}
           >
-            <MdDashboard size={25} style={{ color: "#fff" }} />
-            <CgCopy size={25} style={{ color: "#fff" }} />
-            <Avatar
-              onClick={handleOpenModal}
-              shape="square"
-              size={50}
-              icon={
-                <AiOutlinePlus
-                  size={40}
-                  style={{
-                    color: "#fff",
-                    padding: "0.5rem",
-                    lineHeight: "0",
-                  }}
-                />
-              }
+            <Space
               style={{
-                background:
-                  "linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%)",
-                lineHeight: "0",
-                borderRadius: "10px",
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-            />
-            <BsSearch
-              size={25}
-              style={{ color: "#fff", justifySelf: "flex-end" }}
-            />
-            <AiOutlineBell
-              size={25}
-              style={{ color: "#fff", justifySelf: "flex-end" }}
-            />
-          </Space>
-        </Footer>
+            >
+              <MdDashboard size={25} style={{ color: "#fff" }} />
+              <CgCopy size={25} style={{ color: "#fff" }} />
+              <Avatar
+                onClick={handleOpenModal}
+                shape="square"
+                size={50}
+                icon={
+                  <AiOutlinePlus
+                    size={40}
+                    style={{
+                      color: "#fff",
+                      padding: "0.5rem",
+                      lineHeight: "0",
+                    }}
+                  />
+                }
+                style={{
+                  background:
+                    "linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%)",
+                  lineHeight: "0",
+                  borderRadius: "10px",
+                }}
+              />
+              <BsSearch
+                size={25}
+                style={{ color: "#fff", justifySelf: "flex-end" }}
+              />
+              <AiOutlineBell
+                size={25}
+                style={{ color: "#fff", justifySelf: "flex-end" }}
+              />
+            </Space>
+          </Footer>
+        </div>
       </Layout>
     </div>
   )
