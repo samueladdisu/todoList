@@ -17,6 +17,7 @@
 
 .modal-wrapper .modal {
   background: #17181F;
+  /* background: #fff; */
   width: 90%;
   padding: 20px;
   position: absolute;
@@ -34,6 +35,18 @@
   display: none;
 }
 
+.ant-radio-checked .ant-radio-inner {
+  background:
+    linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%) !important;
+}
+
+.ant-radio-checked .ant-radio-inner:after {
+  background-color: linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%);
+}
+
+.ant-radio:hover .ant-radio-inner {
+  border-color: linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%);
+}
 
 @media screen and (min-width: 768px) {
   .modal-wrapper .modal {
@@ -47,17 +60,23 @@
     top: 15%;
     width: 20%;
   }
+
   .header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
     display: block;
     background: #111116;
     padding: 1rem;
     box-shadow: rgba(0, 0, 0, 0.3);
   }
+
   .sidebar {
     display: block;
   }
+
   .footer {
     display: none;
   }
-} 
-  
+}

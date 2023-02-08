@@ -22,15 +22,17 @@ import {
   Space,
   Avatar,
   Card,
-  Checkbox,
   Button,
   Input,
+  Radio,
 } from "antd"
 import { Link, useParams } from "react-router-dom"
 import { IoIosMore } from "react-icons/io"
 import ModalInput from "../components/ModalInput"
 import HeaderApp from "../components/HeaderApp"
 import axios from "axios"
+import '../styles/style.css'
+
 const { Header, Content, Footer, Sider } = Layout
 
 function getItem(label, key, path, icon, children, type) {
@@ -44,10 +46,27 @@ function getItem(label, key, path, icon, children, type) {
     style: { margin: "20px 0" },
   }
 }
+
+function longPressEvent(callback, ms = 500) {
+  let timeout = null
+  const start = () => (timeout = setTimeout(callback, ms))
+  const stop = () => timeout && window.clearTimeout(timeout)
+
+  return callback
+    ? {
+        onMouseDown: start,
+        onMouseUp: stop,
+        onMouseLeave: stop,
+        onTouchStart: start,
+        onTouchMove: stop,
+        onTouchEnd: stop,
+      }
+    : {}
+}
+
 const items = [
   getItem(
-    "School",
-    "1",
+    <Link to="/todos/1">School </Link>,
     "1",
     <Avatar
       shape="square"
@@ -65,8 +84,7 @@ const items = [
     />
   ),
   getItem(
-    "Personal",
-    "2",
+    <Link to="/todos/2">Personal </Link>,
     "2",
     <Avatar
       shape="square"
@@ -84,8 +102,7 @@ const items = [
     />
   ),
   getItem(
-    "Design",
-    "3",
+    <Link to="/todos/3">Design </Link>,
     "3",
     <Avatar
       shape="square"
@@ -103,8 +120,7 @@ const items = [
     />
   ),
   getItem(
-    "Groceries",
-    "4",
+    <Link to="/todos/4">Groceries </Link>,
     "4",
     <Avatar
       shape="square"
@@ -125,11 +141,93 @@ const items = [
 
 const Todos = () => {
   const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
   const [completedTodos, setCompletedTodos] = useState([])
   const [incompleteTodos, setIncompleteTodos] = useState([])
+  const [selectedTodo, setSelectedTodo] = useState(null)
   const { id } = useParams()
-  useEffect(() => {
+  const [text, setText] = useState("")
+  const [selectedTodotext, setSelectedTodoText] = useState("")
+  const [deletTodo, setDeleteTodo] = useState("")
+  const [collection, setCollection] = useState("")
+  const [completed, setCompleted] = useState(0);
+  // long press functionality
+
+  const handleLongPress = todo => {
+    console.log(todo)
+    setShowDeleteModal(true)
+    setDeleteTodo(todo)
+  }
+
+  const updateTodo = () => {
+    console.log(completed, "completed")
+    axios
+      .put(`http://localhost:3000/api/todos/${selectedTodo.id}`, {
+        title: selectedTodotext,
+        completed: completed,
+        collection_id: id,
+        // date: new Date()
+      })
+      .then(res => {
+        setText("")
+        fetchData()
+        setShowModal(false)
+        console.log(res, "resssssssssssssssssssssssssss")
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const handleDoubleClick = todo => {
+    console.log(todo, "edit")
+    setShowModal(true)
+    setSelectedTodo(todo)
+    setSelectedTodoText(todo.title)
+    setCompleted(todo.completed)
+  }
+
+  const handleCompleted = (e) => {
+    console.log(e.target.value)
+    setCompleted(e.target.value)
+  }
+
+  const deleteTaskHandler = () => {
+    // console.log(deletTodo)
+    axios
+      .delete(`http://localhost:3000/api/todos/${deletTodo.id}`)
+      .then(res => {
+        console.log(res.data)
+        setShowDeleteModal(false)
+        fetchData()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const addTaskHandler = () => {
+    console.log(text)
+    axios
+      .post("http://localhost:3000/api/todos", {
+        title: text,
+        // completed: 0,
+        collection_id: id,
+        date: new Date(),
+      })
+      .then(res => {
+        setText("")
+        fetchData()
+        setShowModal(false)
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const fetchData = () => {
     axios
       .get(`http://localhost:3000/api/todos/${id}`)
       .then(res => {
@@ -150,78 +248,143 @@ const Todos = () => {
       .catch(err => {
         console.log(err)
       })
-  }, [])
+  }
+  useEffect(() => {
+    fetchData()
+    fetchCollection()
+    console.log(collection)
+  }, [id])
 
   const handleOpenModal = () => {
     setShowModal(true)
+    setSelectedTodo(null)
+  }
+  const handeCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+  }
+
+  const fetchCollection = () => {
+    axios
+      .get(`http://localhost:3000/api/collections/${id}`)
+      .then(res => {
+        console.log(res.data[0])
+        setCollection(res.data[0].name)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   const handleCloseModal = () => {
     setShowModal(false)
   }
 
+ 
+
   return (
     <>
-      <HeaderApp menu={true} />
-      <ModalInput show={showModal} onClose={handleCloseModal}>
-        <Input
-          style={{
-            background: "transparent",
-            color: "#fff",
-            borderColor: "#414052",
-          }}
-        />
+      <HeaderApp menu={true} home={true} onChildEvent={handleOpenModal} />
+      {selectedTodo != null ? (
+        <ModalInput show={showModal} onClose={handleCloseModal}>
+          <Input
+            placeholder="Add a task"
+            value={selectedTodotext}
+            onChange={e => setSelectedTodoText(e.target.value)}
+            style={{
+              background: "transparent",
+              color: "#fff",
+              borderColor: "#414052",
+            }}
+          />
+          <Space>
+            <Radio.Group type="dark" style={{ color: "red", marginTop: "1rem" }} onChange={handleCompleted} value={completed}>
+              <Radio style={{ color: "#fff" }} value={1}>completed</Radio>
+              <Radio style={{ color: "#fff" }} value={0}>incompleted</Radio>
+            </Radio.Group>
+          </Space>
+          <Row>
+            <Button
+              onClick={updateTodo}
+              style={{
+                background:
+                  "linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%)",
+                color: "#fff",
+                border: "none",
+                marginTop: "1rem",
+                marginRight: "0.5rem",
+              }}
+            >
+              Update
+            </Button>
+            <Button
+              style={{
+                background: "#414052",
+                border: "none",
+                color: "#fff",
+                marginTop: "1rem",
+                marginRight: "0.5rem",
+              }}
+              onClick={handleCloseModal}
+            >
+              Cancel
+            </Button>
+          </Row>
+        </ModalInput>
+      ) : (
+        <ModalInput show={showModal} onClose={handleCloseModal}>
+          <Typography.Text style={{ color: "#fff", marginBottom: "1rem" }}>
+            Add a task
+          </Typography.Text>
+          <Input
+            placeholder="Add a task"
+            value={text}
+            onChange={e => setText(e.target.value)}
+            style={{
+              background: "transparent",
+              color: "#fff",
+              borderColor: "#414052",
+            }}
+          />
+          
+          <Row>
+            <Button
+              onClick={addTaskHandler}
+              style={{
+                background:
+                  "linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%)",
+                color: "#fff",
+                border: "none",
+                marginTop: "1rem",
+                marginRight: "0.5rem",
+              }}
+            >
+              {selectedTodo != null ? "Update" : "Add"}
+            </Button>
+            <Button
+              style={{
+                background: "#414052",
+                border: "none",
+                color: "#fff",
+                marginTop: "1rem",
+                marginRight: "0.5rem",
+              }}
+              onClick={handleCloseModal}
+            >
+              Cancel
+            </Button>
+          </Row>
+        </ModalInput>
+      )}
+
+      <ModalInput show={showDeleteModal} onClose={handeCloseDeleteModal}>
         <Space>
-          <Button
-            style={{
-              background: "transparent",
-              borderColor: "#414052",
-              color: "#fff",
-              marginTop: "1rem",
-              marginRight: "0.5rem",
-            }}
-            icon={
-              <BsFolderFill
-                style={{ marginRight: "0.5rem", color: "#AC6DDE" }}
-              />
-            }
-          >
-            {" "}
-            Design{" "}
-          </Button>
-          <Button
-            style={{
-              background: "transparent",
-              borderColor: "#414052",
-              color: "#fff",
-              marginTop: "1rem",
-              marginRight: "0.5rem",
-            }}
-            icon={
-              <AiFillCalendar
-                style={{ marginRight: "0.5rem", color: "#3FB970" }}
-              />
-            }
-          >
-            {" "}
-            Today{" "}
-          </Button>
-          <Button
-            style={{
-              background: "transparent",
-              borderColor: "#414052",
-              color: "#fff",
-              marginTop: "1rem",
-            }}
-            icon={
-              <BsFillFlagFill
-                style={{ marginRight: "0.5rem", color: "#EA4848" }}
-              />
-            }
-          ></Button>
+          <Typography.Text style={{ color: "#fff" }}>
+            Are you sure you want to delete this task?
+          </Typography.Text>
         </Space>
         <Row>
           <Button
+            onClick={deleteTaskHandler}
             style={{
               background:
                 "linear-gradient(21.86deg, #CB4BCF 30.51%, #FE8D8A 67.86%, #FE8D8A 91.71%)",
@@ -231,7 +394,7 @@ const Todos = () => {
               marginRight: "0.5rem",
             }}
           >
-            Add Task
+            Delete
           </Button>
           <Button
             style={{
@@ -241,13 +404,12 @@ const Todos = () => {
               marginTop: "1rem",
               marginRight: "0.5rem",
             }}
-            onClick={handleCloseModal}
+            onClick={handeCloseDeleteModal}
           >
             Cancel
           </Button>
         </Row>
       </ModalInput>
-
       <Layout style={{ background: "#17181F", color: "#fff" }}>
         <div className="sidebar">
           <Sider
@@ -278,11 +440,13 @@ const Todos = () => {
               inlineCollapsed={collapsed}
               items={items}
             >
-              {items.map(item => (
+              {/* {items.map(item => (
+                
                 <Link to={`/todos/${item.path}`} key={item.key}>
+                  <p style={{ color: "#fff" }}>{ item.title }</p>
                   <Menu.Item style={{ margin: "0 400px" }}  />
                 </Link>
-              ))}
+              ))} */}
             </Menu>
           </Sider>
         </div>
@@ -301,7 +465,7 @@ const Todos = () => {
                     />
                   </Link>
                   <Typography.Title level={4} style={{ color: "#fff" }}>
-                    School
+                    {collection}
                   </Typography.Title>
                 </Space>
               </Col>
@@ -326,6 +490,8 @@ const Todos = () => {
                       color: "#fff",
                       marginBottom: "1rem",
                     }}
+                    {...longPressEvent(() => handleLongPress(todo))}
+                    onDoubleClick={() => handleDoubleClick(todo)}
                   >
                     <Avatar
                       shape="square"
@@ -360,6 +526,7 @@ const Todos = () => {
                       color: "#fff",
                       marginBottom: "1rem",
                     }}
+                    {...longPressEvent(() => handleLongPress(todo))}
                   >
                     <Avatar
                       shape="square"

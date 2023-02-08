@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -38,11 +38,20 @@ import "../styles/style.css"
 import ModalInput from "../components/ModalInput"
 import HeaderApp from "../components/HeaderApp"
 import { Link } from "react-router-dom"
+import axios from "axios"
 
 const { Header, Sider, Content, Footer } = Layout
 
 function Home() {
   const [showModal, setShowModal] = useState(false)
+  const [school, setSchool] = useState([])
+  const [completeSchool, setCompleteSchool] = useState([])
+  const [personal, setPersonal] = useState([])
+  const [completePersonal, setCompletePersonal] = useState([])
+  const [design, setDesign] = useState([])
+  const [completeDesign, setCompleteDesign] = useState([])
+  const [groceries, setGroceries] = useState([])
+  const [completeGroceries, setCompleteGroceries] = useState([])
 
   const handleOpenModal = () => {
     setShowModal(true)
@@ -51,6 +60,36 @@ function Home() {
   const handleCloseModal = () => {
     setShowModal(false)
   }
+
+  const fetchData = () => {
+    axios
+      .get(`http://localhost:3000/api/todos`)
+      .then(res => {
+        console.log(res.data)
+
+        setSchool(res.data.filter(item => item.collection_id === 1))
+        setCompleteSchool(res.data.filter(item => item.collection_id === 1 && item.completed === 1))
+
+        setPersonal(res.data.filter(item => item.collection_id === 2))
+        setCompletePersonal(res.data.filter(item => item.collection_id === 2 && item.completed === 1))
+
+
+        setDesign(res.data.filter(item => item.collection_id === 3))
+        setCompleteDesign(res.data.filter(item => item.collection_id === 3 && item.completed === 1))
+
+
+        setGroceries(res.data.filter(item => item.collection_id === 4))
+        setCompleteGroceries(res.data.filter(item => item.collection_id === 4 && item.completed === 1))
+        
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <div>
@@ -139,7 +178,7 @@ function Home() {
         </Row>
       </ModalInput>
 
-      <HeaderApp />
+      <HeaderApp home={false} />
 
       <Layout style={{ background: "#17181F" }}>
         <div className="container">
@@ -207,7 +246,7 @@ function Home() {
                       }}
                     >
                       <Typography.Text style={{ color: "#5A5B64" }}>
-                        4/8 done
+                        {completeSchool.length} / {school.length} done
                       </Typography.Text>
                       <VscLoading
                         size={20}
@@ -246,7 +285,7 @@ function Home() {
                       }}
                     >
                       <Typography.Text style={{ color: "#5A5B64" }}>
-                        3/5 done
+                        {completePersonal.length}/ {personal.length} done
                       </Typography.Text>
                       <VscLoading
                         size={20}
@@ -285,7 +324,7 @@ function Home() {
                       }}
                     >
                       <Typography.Text style={{ color: "#5A5B64" }}>
-                        All 15 done
+                        {completeDesign.length} / {design.length} done
                       </Typography.Text>
                       <BsFillCheckCircleFill
                         size={20}
@@ -324,7 +363,7 @@ function Home() {
                       }}
                     >
                       <Typography.Text style={{ color: "#5A5B64" }}>
-                        2/10 done
+                        {completeGroceries.length} / {groceries.length} done
                       </Typography.Text>
                       <VscLoading
                         size={20}
